@@ -40,7 +40,8 @@ namespace ViiaNordic.Services
                 $"{_options.CurrentValue.Viia.BaseApiUrl}/v1/oauth/connect" +
                 $"?client_id={_options.CurrentValue.Viia.ClientId}" +
                 "&response_type=code" +
-                $"&redirect_uri={_options.CurrentValue.Viia.LoginCallbackUrl}" +
+                //$"&redirect_uri={_options.CurrentValue.Viia.LoginCallbackUrl}" +
+                $"&redirect_uri=http://localhost:61658/home" +
                 $"&flow={(oneTime ? "OneTimeUser" : "PersistentUser")}";
 
             return new Uri(connectUrl);
@@ -75,7 +76,7 @@ namespace ViiaNordic.Services
                     grant_type = "authorization_code",
                     code,
                     scope = "read",
-                    redirect_uri = _options.CurrentValue.Viia.LoginCallbackUrl
+                    redirect_uri = "http://localhost:61658/home"
                 };
 
                 var request = new HttpRequestMessage(HttpMethod.Post, requestUrl)
@@ -112,7 +113,7 @@ namespace ViiaNordic.Services
                 grant_type = "refresh_token",
                 refresh_token = refreshToken,
                 scope = "read",
-                redirect_uri = _options.CurrentValue.Viia.LoginCallbackUrl
+                redirect_uri = "http://localhost:61658/home"
             };
 
             var request = new HttpRequestMessage(HttpMethod.Post, requestUrl)

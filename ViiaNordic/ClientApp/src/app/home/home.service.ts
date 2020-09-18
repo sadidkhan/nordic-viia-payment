@@ -1,16 +1,20 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Injectable, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { combineLatest } from 'rxjs/internal/observable/combineLatest';
 
 @Injectable({
     providedIn: 'root'
 })
-export class HomeService {
+export class HomeService  {
 
     baseUri = 'http://localhost:61658/api/payment';
     viiaBaseUri = 'https://api-sandbox.getviia.com/v1';
-    constructor(private http: HttpClient) {
+    constructor(private http: HttpClient
+        ) {
     }
 
+   
     connect(): any {
         const param = {
             client_id: 'fftest-3e2d3cce-a215-4c00-96b5-c3f3611d5eb3',
@@ -33,5 +37,12 @@ export class HomeService {
                 console.log(resposne);
                 window.location.href = resposne;
             });
+    }
+
+    getBankList(code: string, consentId: string): any {
+        this.http.get('http://localhost:61658/api/payment/connectionSuccess?code=' + code + '&&consentId=' + consentId)
+        .subscribe((response: any) => {
+            console.log('response bank', response);
+        });
     }
 }
