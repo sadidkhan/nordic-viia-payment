@@ -9,6 +9,7 @@ using Newtonsoft.Json;
 using ViiaNordic.Handler;
 using ViiaNordic.Models.Cache;
 using ViiaNordic.Models.View;
+using ViiaNordic.Models.Viia;
 using ViiaNordic.Services;
 using ViiaNordic.Services.Interfaces;
 
@@ -40,9 +41,7 @@ namespace ViiaNordic.Controllers
         public JsonResult Connect()
         {
             var uri = _viiaService.GetAuthUri();
-            
             return new JsonResult(uri); // can be redirected from here
-           
         }
 
         [HttpGet]
@@ -69,25 +68,37 @@ namespace ViiaNordic.Controllers
             return new JsonResult(accounts);
         }
 
+        [HttpPost]
+        public async Task<ActionResult<CreatePaymentResultViewModel>> CreateOutboundPayment(CreatePaymentRequestViewModel body)
+        {
+            body = new CreatePaymentRequestViewModel
+            {
+                Amount = 100,
+                Iban = "DK5001234567890123",
+                SourceAccountId = "MDQ0ZDUxMmUtNjhlNy00OTg0LWJhZjctNWMzMjM5NTg5ZjE3fERLX1Rlc3RCYW5rfFVzZHBUSEhsRVlTS2FxeWxBSU1hcll0WFdQbDdrUU1odkxRZy1kdld6encuNDZjMjJmZjhjM2Yw",
+                RecipientFullname = "John Smith",
+                message = "this is a message",
+                TransactionText = "transaction test"
+            };
+            var result = new CreatePaymentResultViewModel();
+            try
+            {
+                var createPaymentResult = await _viiaService.CreateOutboundPayment(body);
+                result.PaymentId = createPaymentResult.PaymentId;
+                result.AuthorizationUrl = createPaymentResult.AuthorizationUrl;
+            }
+            catch (ViiaClientException e)
+            {
+                result.ErrorDescription = e.Message;
+            }
 
+            return Ok(result);
+        }
 
-        //[HttpPost("payments/create/outbound")]
-        //public async Task<ActionResult<CreatePaymentResultViewModel>> CreateOutboundPayment(
-        //    [FromBody] CreatePaymentRequestViewModel body)
-        //{
-        //    var result = new CreatePaymentResultViewModel();
-        //    try
-        //    {
-        //        var createPaymentResult = await _viiaService.CreateOutboundPayment(User, body);
-        //        result.PaymentId = createPaymentResult.PaymentId;
-        //        result.AuthorizationUrl = createPaymentResult.AuthorizationUrl;
-        //    }
-        //    catch (ViiaClientException e)
-        //    {
-        //        result.ErrorDescription = e.Message;
-        //    }
-
-        //    return Ok(result);
-        //}
+        [HttpGet]
+        public IActionResult PaymentCallback([FromQuery] string paymentId)
+        {
+            return null;
+        }
     }
 }

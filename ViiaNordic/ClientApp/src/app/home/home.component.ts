@@ -33,4 +33,8 @@ export class HomeComponent implements OnInit {
   connectWithBackend() {
     this.homeService.connectWithBackend();
   }
+
+  createOutboundPayment() {
+    this.homeService.createOutboundPayment();
+  }
 }
