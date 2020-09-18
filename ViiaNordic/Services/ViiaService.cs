@@ -9,6 +9,7 @@ using System.Net.Http.Headers;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
@@ -26,12 +27,14 @@ namespace ViiaNordic.Services
         private readonly IOptionsMonitor<SiteOptions> _options;
         private readonly HttpClient _httpClient;
         private readonly IMemoryCache _memoryCache;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public ViiaService(IOptionsMonitor<SiteOptions> options, HttpClient httpClient, IMemoryCache memoryCache)
+        public ViiaService(IOptionsMonitor<SiteOptions> options, HttpClient httpClient, IMemoryCache memoryCache, IHttpContextAccessor httpContextAccessor)
         {
             _options = options;
             _httpClient = httpClient;
             _memoryCache = memoryCache;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         public Uri GetAuthUri(bool oneTime = false)
@@ -59,6 +62,11 @@ namespace ViiaNordic.Services
         {
             var tokenInfo = _memoryCache.Get<ChachedViiaInfo>(_options.CurrentValue.FakeUserEmail);
             return tokenInfo;
+        }
+        private string GetPaymentRedirectUrl()
+        {
+            var request = _httpContextAccessor.HttpContext.Request;
+            return $"{request.Scheme}://{request.Host}{request.PathBase}/Payment/PaymentCallback";
         }
 
         public async Task<CodeExchangeResponse> ExchangeCodeForAccessToken(string code)
@@ -181,7 +189,7 @@ namespace ViiaNordic.Services
             var paymentRequest = new CreateOutboundPaymentRequest
             {
                 Culture = request.Culture,
-                RedirectUrl = "",
+                RedirectUrl = GetPaymentRedirectUrl(),
                 Payment = new PaymentRequest
                 {
                     Message = request.message,

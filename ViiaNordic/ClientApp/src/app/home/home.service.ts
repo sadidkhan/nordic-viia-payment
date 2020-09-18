@@ -1,5 +1,6 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { CreatePaymentResult } from './model/create-payment-result';
 
 @Injectable({
     providedIn: 'root'
@@ -32,6 +33,17 @@ export class HomeService {
             .subscribe((resposne: string) => {
                 console.log(resposne);
                 window.location.href = resposne;
+            });
+    }
+
+    createOutboundPayment(): any {
+        const body = {
+            amount: 100
+        };
+        this.http.post(this.baseUri + '/createoutboundpayment', body)
+            .subscribe((resposne: CreatePaymentResult) => {
+                console.log(resposne);
+                window.location.href = encodeURI(resposne.AuthorizationUrl);
             });
     }
 }

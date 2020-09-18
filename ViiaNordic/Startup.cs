@@ -1,9 +1,11 @@
 using System;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.SpaServices.AngularCli;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
 using ViiaNordic.Config;
 using ViiaNordic.Services;
@@ -39,7 +41,8 @@ namespace ViiaNordic
                 client.BaseAddress = new Uri(Configuration.GetSection("Viia").Get<ViiaOptions>().BaseApiUrl);
             });
             services.AddTransient<IHttpClientHandler, HttpClientHandler>();
-            
+            services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+
 
         }
 

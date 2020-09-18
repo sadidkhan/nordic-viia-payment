@@ -14,4 +14,8 @@ export class HomeComponent {
   connectWithBackend() {
     this.homeService.connectWithBackend();
   }
+
+  createOutboundPayment() {
+    this.homeService.createOutboundPayment();
+  }
 }
