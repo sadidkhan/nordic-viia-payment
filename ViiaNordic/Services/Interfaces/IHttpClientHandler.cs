@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
 
-namespace ViiaNordic.Services
+namespace ViiaNordic.Services.Interfaces
 {
-    public interface IHttpHandler
+    public interface IHttpClientHandler
     {
         Task<string> GetStringAsync(string url);
         Task<T> GetJsonAsync<T>(string uri) where T : new();

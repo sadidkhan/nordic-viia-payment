@@ -1,10 +1,13 @@
+using System;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.SpaServices.AngularCli;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using ViiaNordic.Config;
 using ViiaNordic.Services;
+using ViiaNordic.Services.Interfaces;
 
 namespace ViiaNordic
 {
@@ -27,7 +30,16 @@ namespace ViiaNordic
                 configuration.RootPath = "ClientApp/dist";
             });
 
-            services.AddTransient<IHttpHandler, HttpClientHandler>();
+            services.AddMemoryCache();
+            services.Configure<SiteOptions>(Configuration);
+
+
+            services.AddHttpClient<IViiaService, ViiaService>(client =>
+            {
+                client.BaseAddress = new Uri(Configuration.GetSection("Viia").Get<ViiaOptions>().BaseApiUrl);
+            });
+            services.AddTransient<IHttpClientHandler, HttpClientHandler>();
+            
 
         }
 

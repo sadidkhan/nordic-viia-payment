@@ -7,10 +7,11 @@ using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
+using ViiaNordic.Services.Interfaces;
 
 namespace ViiaNordic.Services
 {
-    public class HttpClientHandler : IHttpHandler
+    public class HttpClientHandler : IHttpClientHandler
     {
         private readonly HttpClient _httpClient = new HttpClient();
 
