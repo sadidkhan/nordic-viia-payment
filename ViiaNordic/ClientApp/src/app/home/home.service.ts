@@ -40,7 +40,11 @@ export class HomeService  {
     }
 
     getBankList(code: string, consentId: string): any {
-        this.http.get('http://localhost:61658/api/payment/connectionSuccess?code=' + code + '&&consentId=' + consentId)
+        console.log(code);
+        // tslint:disable-next-line: max-line-length
+        let url = 'http://localhost:61658/api/payment/connectionSuccess' + `?code=${encodeURIComponent(code)}` + '&&consentId=' + consentId;
+        console.log(url);
+        this.http.get(url)
         .subscribe((response: any) => {
             console.log('response bank', response);
         });
