@@ -19,19 +19,12 @@ namespace ViiaNordic.Controllers
     [Route("api/[controller]/[action]")]
     public class PaymentController : ControllerBase
     {
-        private readonly IHttpClientHandler _httpHandler;
         private readonly IViiaService _viiaService;
         private readonly IMemoryCache _memoryCache;
         private readonly IOptionsMonitor<SiteOptions> _options;
-        private readonly string _clientId = "fftest-3e2d3cce-a215-4c00-96b5-c3f3611d5eb3";
-        private readonly string _clientSecret = "cdc480746835d74c331d8d13630d98ff384ccfe0fe61274d5525fed524b3bcf4";
-
-        private readonly string _baseUri = "https://api-sandbox.getviia.com/v1";
-
 
         public PaymentController(IHttpClientHandler httpHandler, IViiaService viiaService, IMemoryCache memoryCache, IOptionsMonitor<SiteOptions> options)
         {
-            _httpHandler = httpHandler;
             _viiaService = viiaService;
             _memoryCache = memoryCache;
             _options = options;
@@ -75,7 +68,7 @@ namespace ViiaNordic.Controllers
             {
                 Amount = 100,
                 Iban = "DK5001234567890123",
-                SourceAccountId = "MDQ0ZDUxMmUtNjhlNy00OTg0LWJhZjctNWMzMjM5NTg5ZjE3fERLX1Rlc3RCYW5rfFVzZHBUSEhsRVlTS2FxeWxBSU1hcll0WFdQbDdrUU1odkxRZy1kdld6encuNDZjMjJmZjhjM2Yw",
+                SourceAccountId = body.SourceAccountId,
                 RecipientFullname = "John Smith",
                 message = "this is a message",
                 TransactionText = "transaction test"
@@ -99,6 +92,20 @@ namespace ViiaNordic.Controllers
         public IActionResult PaymentCallback([FromQuery] string paymentId)
         {
             return null;
+        }
+
+        [HttpGet]
+        public async Task<JsonResult> RefreshToken()
+        {
+            var updatedTokens = await _viiaService.RefreshAccessTokenAndSaveToUser();
+            return new JsonResult(updatedTokens);
+        }
+
+        [HttpGet]
+        public async Task<JsonResult> GetAccounts()
+        {
+            var updatedTokens = await _viiaService.GetUserAccounts();
+            return new JsonResult(updatedTokens);
         }
     }
 }

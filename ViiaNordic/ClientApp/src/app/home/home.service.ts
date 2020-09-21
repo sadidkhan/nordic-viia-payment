@@ -1,6 +1,7 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { Observable } from 'rxjs';
 import { combineLatest } from 'rxjs/internal/observable/combineLatest';
 import { CreatePaymentResult } from './model/create-payment-result';
 
@@ -9,6 +10,7 @@ import { CreatePaymentResult } from './model/create-payment-result';
 })
 export class HomeService  {
 
+    accounts: any[];
     baseUri = 'http://localhost:61658/api/payment';
     viiaBaseUri = 'https://api-sandbox.getviia.com/v1';
     constructor(private http: HttpClient
@@ -45,20 +47,29 @@ export class HomeService  {
         // tslint:disable-next-line: max-line-length
         let url = 'http://localhost:61658/api/payment/connectionSuccess' + `?code=${encodeURIComponent(code)}` + '&&consentId=' + consentId;
         console.log(url);
-        this.http.get(url)
-        .subscribe((response: any) => {
-            console.log('response bank', response);
-        });
+        return this.http.get(url);
     }
 
     createOutboundPayment(): any {
         const body = {
-            amount: 100
+            amount: 100,
+            sourceAccountId: this.accounts[0].id
         };
         this.http.post(this.baseUri + '/createoutboundpayment', body)
             .subscribe((resposne: CreatePaymentResult) => {
                 console.log(resposne);
-                window.location.href = encodeURI(resposne.AuthorizationUrl);
+                // window.location.href = encodeURI(resposne.AuthorizationUrl);
             });
+    }
+
+    refreshToken(): Observable<any> {
+        return this.http.get(this.baseUri + '/RefreshToken');
+    }
+
+    getAccounts(): any {
+        // tslint:disable-next-line: max-line-length
+        let url = 'http://localhost:61658/api/payment/GetAccounts';
+        console.log(url);
+        return this.http.get(url);
     }
 }

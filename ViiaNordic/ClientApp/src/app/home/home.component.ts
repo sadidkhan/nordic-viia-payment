@@ -8,9 +8,11 @@ import { ActivatedRoute } from '@angular/router';
   templateUrl: './home.component.html',
 })
 export class HomeComponent implements OnInit {
+  accounts: any[] = [];
+  accessToken: string;
+  isIceBroken = false;
   constructor(private homeService: HomeService,
-    private route: ActivatedRoute){
-  }
+    private route: ActivatedRoute) { }
 
   ngOnInit() {
     this.route.queryParamMap
@@ -19,8 +21,12 @@ export class HomeComponent implements OnInit {
         const consentId = params.get('consentId');
         console.log(code, consentId);
 
-        if(code && consentId) {
-          this.homeService.getBankList(code, consentId);
+        if (code && consentId) {
+          this.isIceBroken = true;
+          this.homeService.getBankList(code, consentId).subscribe((response: any) => {
+            this.accounts = response;
+            console.log('response bank', response);
+          });
         }
       });
   }
@@ -36,5 +42,21 @@ export class HomeComponent implements OnInit {
 
   createOutboundPayment() {
     this.homeService.createOutboundPayment();
+  }
+
+  refreshToken() {
+    this.homeService.refreshToken()
+      .subscribe({
+        next: response => {
+          this.accessToken = response['accessToken'];
+        }
+      });
+  }
+
+  getAccounts(){
+    this.homeService.getAccounts().subscribe((response: any) => {
+      this.accounts = response;
+      console.log('response bank', response);
+    });
   }
 }

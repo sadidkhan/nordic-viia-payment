@@ -64,6 +64,7 @@ namespace ViiaNordic.Services
             var tokenInfo = _memoryCache.Get<ChachedViiaInfo>(_options.CurrentValue.FakeUserEmail);
             return tokenInfo;
         }
+
         private string GetPaymentRedirectUrl()
         {
             var request = _httpContextAccessor.HttpContext.Request;
@@ -145,7 +146,7 @@ namespace ViiaNordic.Services
 
         }
 
-        private async Task<CodeExchangeResponse> RefreshAccessTokenAndSaveToUser(ClaimsPrincipal principal)
+        public async Task<CodeExchangeResponse> RefreshAccessTokenAndSaveToUser()
         {
             //var currentUserId = principal.FindFirst(ClaimTypes.NameIdentifier).Value;
             //var user = _dbContext.Users.FirstOrDefault(x => x.Id == currentUserId);
@@ -172,8 +173,13 @@ namespace ViiaNordic.Services
             return result;
         }
 
-        public async Task<IImmutableList<Account>> GetUserAccounts(CodeExchangeResponse tokenResponse)
+        public async Task<IImmutableList<Account>> GetUserAccounts(CodeExchangeResponse tokenResponse = null)
         {
+            if (tokenResponse == null)
+            {
+                tokenResponse = await RefreshAccessTokenAndSaveToUser();
+            }
+
             var result = await HttpGet<AccountsResponse>("/v1/accounts", tokenResponse.TokenType, tokenResponse.AccessToken);
             return result?.Accounts.ToImmutableList();
         }
@@ -285,7 +291,7 @@ namespace ViiaNordic.Services
             catch (ViiaClientException e) when (e.StatusCode == HttpStatusCode.Unauthorized && !string.IsNullOrEmpty(accessToken) &&
                                                 !isRetry)
             {
-                var updatedTokens = await RefreshAccessTokenAndSaveToUser(principal);
+                var updatedTokens = await RefreshAccessTokenAndSaveToUser();
                 return await HttpGet<T>(url, updatedTokens.TokenType, updatedTokens.AccessToken, principal, true);
             }
         }

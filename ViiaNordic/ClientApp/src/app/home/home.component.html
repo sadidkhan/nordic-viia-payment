@@ -1,7 +1,80 @@
+<div class="container">
+    <div class="row m-3">
+        <div class="col">
+            <button type="button" class="btn btn-primary" (click)="connectWithVia()">connect</button>
+        </div>
+        <div class="col">
+            <button type="button" class="btn btn-primary" (click)="connectWithBackend()">connect with backend</button>
+        </div>
+        <div class="col">
+            <button type="button" class="btn btn-primary" (click)="createOutboundPayment()">create outbound payment</button>
+        </div>
+    </div>
 
+    <ng-container *ngIf="isIceBroken">
+        <div class="form-group m-3">
+            <button type="button" class="btn btn-primary" (click)="refreshToken()">refresh token</button>
+            <textarea type="textarea" class="form-control"  value="{{accessToken}}"></textarea>
+        </div>
+    
+        <div class="row m-3">
+            <div>
+                <label class="m-2">Accounts</label>
+                <button class="btn btn-primary" (click)="getAccounts()">Fetch account</button>
+            </div>
+            <div>
+                <div *ngFor="let account of accounts">
+                    <div class="media-body ml-3" style="cursor: pointer; background-color: gray;">
+                        <p class="mt-3">{{account.name}}</p>
 
-<button (click)="connectWithVia()">connect</button>
-<button (click)="connectWithBackend()">connect with backend</button>
+                        <ng-container *ngIf="account.number?.bban != null || account.number?.iban != null">
+                        
+                            <p> {{account.number.bban}}{{account.number.iban}} </p>
+                            <p>
+                                <small>Last updated {{account.lastSynchronized}}</small>
+                            </p>
+                        </ng-container>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-<button (click)="createOutboundPayment()">create outbound payment</button>
-
+        <!-- <div class="row m-3">
+            <div>
+                <label class="m-2">Accounts</label>
+                <button class="btn btn-primary" (click)="getAccounts()">Fetch account</button>
+            </div>
+            <div class="col">
+                <ng-container *ngIf="accounts.length === 0">
+                    <p class="text-center">
+                        There are no accounts connected. Connect to accounts with one of the flows above.
+                    </p>
+                </ng-container>
+                <ng-container *ngIf="accounts.length === 0">
+                        <div class="card mb-3">
+                            
+                            <div class="card-body">
+                                <div *ngFor="let account of accounts">
+                                    
+        
+                                        <div class="media-body ml-3" style="cursor: pointer">
+                                            <p class="mt-3">{{account.Name}}</p>
+        
+                                            <ng-container *ngIf="account.Number?.Bban != null || account.Number?.Iban != null">
+                                            
+                                                <p> {{account.Number.Bban}}{{account.Number.Iban}} </p>
+                                                <p>
+                                                    <small>Last updated {{account.LastSynchronized}}</small>
+                                                </p>
+                                            </ng-container>
+                                        </div>
+                                    
+                                </div>
+                            </div>
+                        </div>
+                    </ng-container>
+            </div>
+        </div> -->
+    </ng-container>
+    
+</div>
