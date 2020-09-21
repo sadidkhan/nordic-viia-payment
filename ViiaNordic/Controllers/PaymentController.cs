@@ -64,15 +64,6 @@ namespace ViiaNordic.Controllers
         [HttpPost]
         public async Task<ActionResult<CreatePaymentResultViewModel>> CreateOutboundPayment(CreatePaymentRequestViewModel body)
         {
-            body = new CreatePaymentRequestViewModel
-            {
-                Amount = 100,
-                Iban = "DK5001234567890123",
-                SourceAccountId = body.SourceAccountId,
-                RecipientFullname = "John Smith",
-                message = "this is a message",
-                TransactionText = "transaction test"
-            };
             var result = new CreatePaymentResultViewModel();
             try
             {

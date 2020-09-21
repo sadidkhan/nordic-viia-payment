@@ -24,7 +24,7 @@
             </div>
             <div>
                 <div *ngFor="let account of accounts">
-                    <div class="media-body ml-3" style="cursor: pointer; background-color: gray;">
+                    <div class="media-body ml-3" style="cursor: pointer; background-color: gray;" (click)="createOutboundPayment(account)">
                         <p class="mt-3">{{account.name}}</p>
 
                         <ng-container *ngIf="account.number?.bban != null || account.number?.iban != null">
@@ -38,43 +38,6 @@
                 </div>
             </div>
         </div>
-
-        <!-- <div class="row m-3">
-            <div>
-                <label class="m-2">Accounts</label>
-                <button class="btn btn-primary" (click)="getAccounts()">Fetch account</button>
-            </div>
-            <div class="col">
-                <ng-container *ngIf="accounts.length === 0">
-                    <p class="text-center">
-                        There are no accounts connected. Connect to accounts with one of the flows above.
-                    </p>
-                </ng-container>
-                <ng-container *ngIf="accounts.length === 0">
-                        <div class="card mb-3">
-                            
-                            <div class="card-body">
-                                <div *ngFor="let account of accounts">
-                                    
-        
-                                        <div class="media-body ml-3" style="cursor: pointer">
-                                            <p class="mt-3">{{account.Name}}</p>
-        
-                                            <ng-container *ngIf="account.Number?.Bban != null || account.Number?.Iban != null">
-                                            
-                                                <p> {{account.Number.Bban}}{{account.Number.Iban}} </p>
-                                                <p>
-                                                    <small>Last updated {{account.LastSynchronized}}</small>
-                                                </p>
-                                            </ng-container>
-                                        </div>
-                                    
-                                </div>
-                            </div>
-                        </div>
-                    </ng-container>
-            </div>
-        </div> -->
     </ng-container>
     
 </div>

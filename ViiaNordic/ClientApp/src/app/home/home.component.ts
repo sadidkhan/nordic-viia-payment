@@ -35,13 +35,12 @@ export class HomeComponent implements OnInit {
     this.homeService.connect();
   }
 
-
   connectWithBackend() {
     this.homeService.connectWithBackend();
   }
 
-  createOutboundPayment() {
-    this.homeService.createOutboundPayment();
+  createOutboundPayment(account) {
+    this.homeService.createOutboundPayment(account);
   }
 
   refreshToken() {
@@ -53,7 +52,7 @@ export class HomeComponent implements OnInit {
       });
   }
 
-  getAccounts(){
+  getAccounts() {
     this.homeService.getAccounts().subscribe((response: any) => {
       this.accounts = response;
       console.log('response bank', response);

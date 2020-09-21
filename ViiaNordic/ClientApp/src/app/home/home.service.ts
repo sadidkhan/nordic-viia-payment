@@ -50,10 +50,15 @@ export class HomeService  {
         return this.http.get(url);
     }
 
-    createOutboundPayment(): any {
+    createOutboundPayment(account): any {
         const body = {
             amount: 100,
-            sourceAccountId: this.accounts[0].id
+            sourceAccountId: account.id,
+            bbanAccountNumber: account.number.bbanParsed.accountNumber,
+            bbanBankCode: account.number.bbanParsed.bankCode,
+            iban: account.number.iban,
+            recipientFullname: account.owner,
+            message: `amount 100`
         };
         this.http.post(this.baseUri + '/createoutboundpayment', body)
             .subscribe((resposne: CreatePaymentResult) => {
