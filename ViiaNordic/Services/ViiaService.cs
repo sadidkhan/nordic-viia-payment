@@ -68,7 +68,7 @@ namespace ViiaNordic.Services
         private string GetPaymentRedirectUrl()
         {
             var request = _httpContextAccessor.HttpContext.Request;
-            return $"{request.Scheme}://{request.Host}{request.PathBase}/Payment/PaymentCallback";
+            return $"{request.Scheme}://{request.Host}{request.PathBase}/home";
         }
 
         public async Task<CodeExchangeResponse> ExchangeCodeForAccessToken(string code)

@@ -20,13 +20,16 @@ export class HomeComponent implements OnInit {
         const code = params.get('code');
         const consentId = params.get('consentId');
         console.log(code, consentId);
-
+        const paymentId = params.get('paymentId');
         if (code && consentId) {
           this.isIceBroken = true;
           this.homeService.getBankList(code, consentId).subscribe((response: any) => {
             this.accounts = response;
             console.log('response bank', response);
           });
+        }
+        if (paymentId) {
+          console.log(paymentId);
         }
       });
   }
