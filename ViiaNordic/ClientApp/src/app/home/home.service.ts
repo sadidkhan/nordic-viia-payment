@@ -17,7 +17,6 @@ export class HomeService  {
         ) {
     }
 
-   
     connect(): any {
         const param = {
             client_id: 'fftest-3e2d3cce-a215-4c00-96b5-c3f3611d5eb3',
@@ -61,9 +60,8 @@ export class HomeService  {
             message: `amount 100`
         };
         this.http.post(this.baseUri + '/createoutboundpayment', body)
-            .subscribe((resposne: CreatePaymentResult) => {
-                console.log(resposne);
-                // window.location.href = encodeURI(resposne.AuthorizationUrl);
+            .subscribe((response: CreatePaymentResult) => {
+                window.location.href = encodeURI(response.authorizationUrl);
             });
     }
 

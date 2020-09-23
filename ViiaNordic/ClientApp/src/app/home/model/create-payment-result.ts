@@ -1,5 +1,5 @@
 export interface CreatePaymentResult {
-    ErrorDescription: string;
-    PaymentId: string;
-    AuthorizationUrl: string;
+    errorDescription: string;
+    paymentId: string;
+    authorizationUrl: string;
 }
