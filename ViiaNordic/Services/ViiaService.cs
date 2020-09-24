@@ -109,6 +109,19 @@ namespace ViiaNordic.Services
             //}
         }
 
+        public async Task<ValidateAccountResponse> ValidateAccount(string id, CodeExchangeResponse tokenResponse = null)
+        {
+            if (tokenResponse == null)
+            {
+                tokenResponse = await RefreshAccessTokenAndSaveToUser();
+            }
+
+            var result = await HttpGet<ValidateAccountResponse>($"/v1/accounts/{id}", tokenResponse.TokenType, tokenResponse.AccessToken);
+
+            return result;
+        }
+
+
         public async Task<CodeExchangeResponse> RefreshAccessToken(string refreshToken)
         {
 

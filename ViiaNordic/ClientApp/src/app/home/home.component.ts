@@ -42,6 +42,11 @@ export class HomeComponent implements OnInit {
     this.homeService.connectWithBackend();
   }
 
+  // validateAccount(account){
+  //   this.homeService.validateAccount(account);
+  //  // this.createOutboundPayment(account);
+  // }
+
   createOutboundPayment(account) {
     this.homeService.createOutboundPayment(account);
   }

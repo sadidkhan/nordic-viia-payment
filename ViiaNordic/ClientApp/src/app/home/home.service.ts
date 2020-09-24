@@ -65,6 +65,13 @@ export class HomeService  {
             });
     }
 
+    // validateAccount(account): any {
+    //     this.http.get(this.baseUri + '/validateAccount?id=' + account.id )
+    //         .subscribe((response: any) => {
+    //             console.log(response);
+    //         });
+    // }
+
     refreshToken(): Observable<any> {
         return this.http.get(this.baseUri + '/RefreshToken');
     }

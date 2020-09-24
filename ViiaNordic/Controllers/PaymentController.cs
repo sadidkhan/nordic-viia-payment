@@ -61,22 +61,37 @@ namespace ViiaNordic.Controllers
             return new JsonResult(accounts);
         }
 
+        [HttpGet]
+        public async Task<JsonResult> ValidateAccount(string id)
+        {
+            var response = await _viiaService.ValidateAccount(id, null);
+
+            return new JsonResult(response);
+        }
+
         [HttpPost]
         public async Task<ActionResult<CreatePaymentResultViewModel>> CreateOutboundPayment(CreatePaymentRequestViewModel body)
         {
-            var result = new CreatePaymentResultViewModel();
-            try
+            var response = await _viiaService.ValidateAccount(body.SourceAccountId, null);
+
+            if (response.Features.PaymentTo)
             {
-                var createPaymentResult = await _viiaService.CreateOutboundPayment(body);
-                result.PaymentId = createPaymentResult.PaymentId;
-                result.AuthorizationUrl = createPaymentResult.AuthorizationUrl;
-            }
-            catch (ViiaClientException e)
-            {
-                result.ErrorDescription = e.Message;
+                var result = new CreatePaymentResultViewModel();
+                try
+                {
+                    var createPaymentResult = await _viiaService.CreateOutboundPayment(body);
+                    result.PaymentId = createPaymentResult.PaymentId;
+                    result.AuthorizationUrl = createPaymentResult.AuthorizationUrl;
+                }
+                catch (ViiaClientException e)
+                {
+                    result.ErrorDescription = e.Message;
+                }
+
+                return Ok(result);
             }
 
-            return Ok(result);
+            throw new Exception("Payment is not possible from this account");
         }
 
         [HttpGet]

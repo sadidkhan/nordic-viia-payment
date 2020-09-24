@@ -11,7 +11,7 @@
         </div>
     </div>
 
-    <ng-container *ngIf="isIceBroken">
+    <ng-container>
         <div class="form-group m-3">
             <button type="button" class="btn btn-primary" (click)="refreshToken()">refresh token</button>
             <textarea type="textarea" class="form-control"  value="{{accessToken}}"></textarea>

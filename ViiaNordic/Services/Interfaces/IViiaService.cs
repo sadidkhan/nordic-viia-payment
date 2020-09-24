@@ -13,6 +13,7 @@ namespace ViiaNordic.Services.Interfaces
     {
         Uri GetAuthUri(bool oneTime = false);
         Task<CodeExchangeResponse> ExchangeCodeForAccessToken(string code);
+        Task<ValidateAccountResponse> ValidateAccount(string id, CodeExchangeResponse tokenResponse);
         Task<CodeExchangeResponse> RefreshAccessTokenAndSaveToUser();
         Task<IImmutableList<Account>> GetUserAccounts(CodeExchangeResponse tokenResponse = null);
         Task<CreatePaymentResponse> CreateOutboundPayment(CreatePaymentRequestViewModel request);
