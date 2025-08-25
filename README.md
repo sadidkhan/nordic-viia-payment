@@ -38,6 +38,7 @@ git clone https://github.com/sadidkhan/nordic-viia-payment.git
 cd nordic-viia-payment
 dotnet restore
 dotnet run --project ViiaNordic
+```
 
 ---
 
@@ -58,3 +59,4 @@ Add your credentials in appsettings.json (for local dev) or as environment varia
     }
   }
 }
+```
